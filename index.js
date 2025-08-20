@@ -33,16 +33,16 @@ io.on("connection", (socket) => {
       content,
     });
   });
-  socket.on("typing", ({ userId, receiver }) => {
-    console.log(`User ${userId} started typing to ${receiver}`);
-    io.to(receiver).emit("typing", {
+  socket.on("typing", ({ userId, receiverId }) => {
+    console.log(`User ${userId} started typing to ${receiverId}`);
+    io.to(receiverId).emit("typing", {
       userId,
     });
   });
-  socket.on("stopTyping", ({ userId, receiver }) => {
-    console.log(`User ${userId} stopped typing to ${receiver}`);
+  socket.on("stopTyping", ({ userId, receiverId }) => {
+    console.log(`User ${userId} stopped typing to ${receiverId}`);
 
-    io.to(receiver).emit("stopTyping", {
+    io.to(receiverId).emit("stopTyping", {
       userId,
     });
   });
