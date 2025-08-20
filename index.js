@@ -39,6 +39,9 @@ io.on("connection", (socket) => {
       userId,
     });
   });
+  socket.on("messages-read", ({ senderId, receiverId }) => {
+    socket.broadcast.emit("messages-read", { senderId, receiverId });
+  });
   socket.on("stopTyping", ({ userId, receiverId }) => {
     console.log(`User ${userId} stopped typing to ${receiverId}`);
 

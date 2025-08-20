@@ -55,4 +55,45 @@ router.route("/messages/send").post(verifyToken, async (req, res) => {
       .json({ message: "Internal server error", success: false });
   }
 });
+
+// Add this route to mark messages as read
+router.put("/:userId/read", verifyToken, async (req, res) => {
+  try {
+    const { userId } = req.params;
+
+    // Update all unread messages where current user is receiver
+    const result = await Message.updateMany(
+      {
+        sender: userId,
+        receiver: req.user._id,
+        read: false,
+      },
+      {
+        $set: { read: true },
+      }
+    );
+
+    if (result.modifiedCount > 0) {
+      return res.status(200).json({
+        message: "Messages marked as read",
+        success: true,
+        modifiedCount: result.modifiedCount,
+      });
+    }
+
+    return res.status(200).json({
+      message: "No messages to mark as read",
+      success: true,
+      modifiedCount: 0,
+    });
+  } catch (error) {
+    console.error("Error marking messages as read:", error);
+    return res.status(500).json({
+      message: "Error marking messages as read",
+      success: false,
+      error: error.message,
+    });
+  }
+});
+
 export default router;
