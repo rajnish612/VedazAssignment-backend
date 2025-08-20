@@ -33,6 +33,20 @@ io.on("connection", (socket) => {
       content,
     });
   });
+  socket.on("typing", ({ userId, receiver }) => {
+    console.log(`User ${userId} started typing to ${receiver}`);
+    io.to(receiver).emit("typing", {
+      userId,
+    });
+  });
+  socket.on("stopTyping", ({ userId, receiver }) => {
+    console.log(`User ${userId} stopped typing to ${receiver}`);
+
+    io.to(receiver).emit("stopTyping", {
+      userId,
+    });
+  });
+
   socket.on("disconnect", () => {
     console.log("A user disconnected");
   });
