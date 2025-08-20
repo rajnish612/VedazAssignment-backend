@@ -40,7 +40,9 @@ io.on("connection", (socket) => {
     });
   });
   socket.on("messages-read", ({ senderId, receiverId }) => {
-    socket.broadcast.emit("messages-read", { senderId, receiverId });
+    console.log(`Messages read by ${receiverId} from ${senderId}`);
+
+    socket.to(receiverId).emit("messages-read", { senderId });
   });
   socket.on("stopTyping", ({ userId, receiverId }) => {
     console.log(`User ${userId} stopped typing to ${receiverId}`);
